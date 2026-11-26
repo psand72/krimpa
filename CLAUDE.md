@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## État actuel du dépôt (à mettre à jour)
 
-Au 2026-11-26, les étapes 1 et 2 sont faites :
+Au 2026-11-26, les étapes 1, 2 et 3 sont faites :
+- déploiement : `.github/workflows/deploy.yml` est copié **à l'identique** de `docs/hosting.md`, section GitHub Pages (la même doc que quartz.jzhao.xyz/hosting). Il se déclenche sur un push vers `v5`. Pages est activé avec la source GitHub Actions. Site : https://psand72.github.io/krimpa/ ;
+- plugin `@quartz-community/cname` désactivé dans `quartz.config.yaml`. Selon son README, il sert aux domaines personnalisés, et nous n'en avons pas ;
 - le dossier est un clone de `jackyzha0/quartz` (Quartz **v5.2.2**). `npx quartz create --template obsidian --strategy new --links shortest --baseUrl psand72.github.io/krimpa` a été exécuté ;
 - `quartz.config.yaml` : `pageTitle: "Krimpa"`, `locale: fr-FR`, `analytics: null` (le modèle activait Plausible) ;
 - remotes : `origin` = dépôt GitHub public `psand72/krimpa`, `upstream` = `jackyzha0/quartz` (utilisé par `npx quartz upgrade`) ;
@@ -93,12 +95,12 @@ Convention :
 Ces points viennent de la documentation v4 ou de connaissances non retestées en v5 :
 1. ~~`templates` est-il dans `ignorePatterns` par défaut ?~~ **Vérifié (v5.2.2)** : oui, dans `quartz.config.default.yaml` et dans le modèle `obsidian`. Le build de test n'a lu que `content/index.md`.
 2. `npx quartz sync` existe-t-il toujours et fait-il commit + push ?
-3. Le workflow de déploiement GitHub Pages recommandé par la documentation officielle (le reprendre tel quel).
+3. ~~Le workflow de déploiement GitHub Pages recommandé par la documentation officielle.~~ **Fait** : repris tel quel depuis `docs/hosting.md`.
 4. Le wikilink échappé `[[fiche\|alias]]` dans un tableau s'affiche-t-il correctement ?
 5. Une balise `<iframe>` écrite dans une fiche Markdown est-elle conservée dans la page générée ?
 6. Quel chemin utiliser pour la page HTML dans le lien et l'iframe : sur un site de projet GitHub Pages (`<utilisateur>.github.io/<dépôt>/`), un chemin commençant par `/` vise la racine du domaine. Tester `/<dépôt>/html/<nom>.html` et un chemin relatif **sur le site publié**, puis corriger le modèle `fiche-html.md`.
 7. L'affichage de l'iframe sur mobile (hauteur, défilement).
-8. Le build génère un fichier `public/CNAME` contenant `psand72.github.io`. Que devient ce fichier avec un déploiement GitHub Pages par Actions sur un site de projet ? À vérifier à l'étape 3.
+8. ~~Le build génère un fichier `public/CNAME`.~~ **Réglé** : ce fichier vient du plugin `@quartz-community/cname`, qui est désactivé. Il n'est donc plus généré.
 
 ## Prochaines étapes
 
