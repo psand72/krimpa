@@ -15,7 +15,7 @@ Au 2026-11-26, les étapes 1 à 4 sont faites :
 - remotes : `origin` = dépôt GitHub public `psand72/krimpa`, `upstream` = `jackyzha0/quartz` (utilisé par `npx quartz upgrade`) ;
 - `.github/dependabot.yml`, hérité de Quartz, a été supprimé pour éviter des pull requests automatiques. Les autres workflows de `.github/` ne tournent que sur `jackyzha0/quartz`. Ils sont inertes ici et ont été laissés pour limiter les conflits lors de `npx quartz upgrade` ;
 - identité git **locale** au dépôt : `psand72` / adresse noreply GitHub, pour ne pas exposer d'adresse réelle ;
-- `content/index.md` est encore la page d'accueil vierge générée par Quartz (à réécrire à l'étape 5).
+- `content/index.md` est la page d'accueil, avec la liste des domaines en liens vers les pages de dossier (`[[cds/|CDS]]`). Un lien reste en 404 tant que son dossier n'a pas de fiche. Les « fiches récentes » viennent du plugin `@quartz-community/recent-notes`, affiché uniquement sur l'accueil (`condition: is-index`, `limit: 5`) ;
 
 Branche et `sync`, vérifiés dans `quartz/cli/handlers.js` :
 - la branche principale s'appelle **`v5`** et ne doit pas être renommée. `npx quartz sync` tire toujours `origin v5` (`QUARTZ_SOURCE_BRANCH` dans `quartz/cli/constants.js`) ;
@@ -63,11 +63,13 @@ content/
 ├── datasphere/
 ├── cds/
 ├── s4-embedded/
+├── s4-fonctionnel/
 ├── sac/
 ├── abap/
 ├── python/
 ├── methode/
-├── html/             # pages HTML autonomes (voir « Pages HTML »)
+├── html/             # pages HTML autonomes en .htm (voir « Pages HTML »)
+├── private/          # brouillons à relire : ni publiés, ni commités (voir « Brouillons »)
 └── templates/        # modèles Obsidian, jamais publiés
 ```
 
@@ -78,15 +80,30 @@ Conventions :
 - liens entre fiches avec des wikilinks `[[nom-de-fiche]]` ;
 - modèles : `content/templates/fiche.md` (fiche standard) et `content/templates/fiche-html.md` (fiche d'accompagnement d'une page HTML).
 
+## Brouillons
+
+`content/private/` est le dossier tampon des brouillons à relire et à mettre en forme. Il est exclu deux fois, vérifié en v5.2.2 :
+- du site, par `private` dans `ignorePatterns` (`quartz.config.yaml`) ;
+- de git, par `private/` dans `.gitignore`, donc `npx quartz sync` ne l'envoie pas sur le dépôt public.
+
+Ne pas retirer ces deux exclusions. `draft: true` ne suffit pas pour un contenu non relu : la fiche est masquée du site, mais elle est quand même poussée sur le dépôt GitHub public. **Règles de contrôle d'un brouillon avant publication** (décidées le 2026-11-26) :
+- lire le brouillon en entier et lister à l'utilisateur les références client ou projet trouvées, avec leurs numéros de ligne ;
+- **conserver tels quels** les termes génériques (« projet », « client », « besoin », « métier », « cadrage », « POC »…) et les noms d'éditeurs, de solutions ou de logiciels (SAP, BO, Fivetran, Snowflake, Microsoft…) ;
+- **reformuler sans changer le sens** toute phrase contenant un nom qui permet d'identifier une entreprise cliente ou une personne. Par exemple, un responsable nommé est remplacé par son rôle ;
+- en cas de doute sur un nom ou un détail, demander à l'utilisateur plutôt que trancher.
+
 ## Pages HTML
 
-Quartz copie les fichiers `.html` du dossier `content/` tels quels : ils sont en ligne, mais absents de la recherche, des tags, du graphe et de la navigation. Toute page HTML est donc **accompagnée d'une fiche Markdown** qui la rend trouvable.
+Quartz copie les fichiers non-Markdown du dossier `content/` : ils sont en ligne, mais absents de la recherche, des tags, du graphe et de la navigation. Toute page HTML est donc **accompagnée d'une fiche Markdown** qui la rend trouvable.
+
+**Extension `.htm` obligatoire** (vérifié dans le code de v5.2.2). À la copie, `slugifyFilePath` (`@quartz-community/utils`) retire les extensions `.md` **et `.html`**. Un `content/html/<nom>.html` sortirait donc en `public/html/<nom>`, sans extension, et GitHub Pages ne le servirait pas comme une page. L'extension `.htm` est conservée, et la page sort en `public/html/<nom>.htm`.
 
 Convention :
-- la page HTML va dans `content/html/<nom>.html` ; si elle a des fichiers annexes (CSS, JS, images), elle va dans un sous-dossier `content/html/<nom>/index.html` ;
+- la page va dans `content/html/<nom>.htm`. Si elle a des fichiers annexes (CSS, JS, images), elle va dans un sous-dossier `content/html/<nom>/index.htm` et le lien vise alors `/html/<nom>/index.htm`. Cette variante n'a pas été testée : c'est une déduction tirée du même code, et un `index.html` y perdrait aussi son extension ;
 - la fiche d'accompagnement va dans le dossier de son domaine, **avec le même `<nom>`** : `content/cds/<nom>.md` ;
-- ne jamais placer un `.html` à côté d'un `.md` de même nom : Quartz génère lui-même un `<nom>.html` pour chaque fiche, et les deux fichiers entreraient en collision ;
-- la fiche est créée à partir du modèle `fiche-html.md` : tag `page-html`, lien « ouvrir en plein écran » et intégration par `<iframe>`. Le modèle contient deux marqueurs à remplacer, `NOM` et `DEPOT` (chemin provisoire `/DEPOT/html/NOM.html`, en attendant le point à vérifier n° 6) ;
+- la fiche est créée à partir du modèle `fiche-html.md` (tag `page-html`). Le seul marqueur à remplacer est `NOM` ;
+- **chemins** (vérifié au build) : écrire `/html/<nom>.htm` dans le lien et dans l'`<iframe>`. Quartz traite `/` comme la racine de `content/` et réécrit le chemin en relatif (`../html/<nom>.htm`), ce qui fonctionne sur le site de projet `/krimpa/`. Ne **pas** écrire `/krimpa/html/…` : Quartz le transformerait en `../krimpa/html/…`, un lien cassé ;
+- le lien « plein écran » est une balise HTML `<a … data-router-ignore>`. Sans cet attribut, le routeur SPA de Quartz (`enableSPA: true`) intercepterait le clic et chargerait la page dans son propre gabarit, où ses scripts ne s'exécuteraient pas. Cet attribut est documenté dans `docs/features/SPA Routing.md` ;
 - la `description` et le résumé de la fiche sont **le seul texte indexé** par la recherche : y mettre les mots-clés utiles ;
 - la page HTML est autonome : CSS et JS intégrés ou en chemins relatifs, bibliothèques externes uniquement depuis un CDN ;
 - laisser `publishAssets` à sa valeur par défaut (`"all"`).
@@ -97,9 +114,9 @@ Ces points viennent de la documentation v4 ou de connaissances non retestées en
 1. ~~`templates` est-il dans `ignorePatterns` par défaut ?~~ **Vérifié (v5.2.2)** : oui, dans `quartz.config.default.yaml` et dans le modèle `obsidian`. Le build de test n'a lu que `content/index.md`.
 2. `npx quartz sync` existe-t-il toujours et fait-il commit + push ?
 3. ~~Le workflow de déploiement GitHub Pages recommandé par la documentation officielle.~~ **Fait** : repris tel quel depuis `docs/hosting.md`.
-4. Le wikilink échappé `[[fiche\|alias]]` dans un tableau s'affiche-t-il correctement ?
-5. Une balise `<iframe>` écrite dans une fiche Markdown est-elle conservée dans la page générée ?
-6. Quel chemin utiliser pour la page HTML dans le lien et l'iframe : sur un site de projet GitHub Pages (`<utilisateur>.github.io/<dépôt>/`), un chemin commençant par `/` vise la racine du domaine. Tester `/<dépôt>/html/<nom>.html` et un chemin relatif **sur le site publié**, puis corriger le modèle `fiche-html.md`.
+4. ~~Le wikilink échappé `[[fiche\|alias]]` dans un tableau s'affiche-t-il correctement ?~~ **Vérifié au build** : oui, le lien est correct et l'alias s'affiche.
+5. ~~Une balise `<iframe>` écrite dans une fiche Markdown est-elle conservée ?~~ **Vérifié au build** : oui. Son `src` est réécrit comme un lien interne (voir « Pages HTML »).
+6. Chemin de la page HTML : **réglé au build**, avec `/html/<nom>.htm` et l'extension `.htm` (voir « Pages HTML »). Reste à confirmer **sur le site publié** que la page s'ouvre en plein écran et dans l'iframe.
 7. L'affichage de l'iframe sur mobile (hauteur, défilement).
 8. ~~Le build génère un fichier `public/CNAME`.~~ **Réglé** : ce fichier vient du plugin `@quartz-community/cname`, qui est désactivé. Il n'est donc plus généré.
 

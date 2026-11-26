@@ -8,17 +8,16 @@ draft: false
 
 > [!abstract] En bref
 > Ce que contient la page et à quoi elle sert, en une ou deux phrases.
-> [Ouvrir en plein écran](/DEPOT/html/NOM.html)
+> <a href="/html/NOM.htm" data-router-ignore>Ouvrir en plein écran</a>
 
-<iframe src="/DEPOT/html/NOM.html" style="width:100%;height:80vh;border:none"></iframe>
+<iframe src="/html/NOM.htm" style="width:100%;height:80vh;border:none"></iframe>
 
 ## Voir aussi
 
 - [[]]
 
 <!--
-À remplacer :
-- NOM : nom du fichier HTML dans content/html/ (identique au nom de cette fiche) ;
-- DEPOT : nom du dépôt GitHub, tant que le chemin définitif n'a pas été validé
-  sur le site publié (voir CLAUDE.md, point à vérifier n° 6).
+À remplacer : NOM = nom du fichier content/html/NOM.htm (identique au nom de cette fiche).
+Extension .htm obligatoire, chemin commençant par /html/ (Quartz le rend relatif),
+et data-router-ignore sur le lien : voir CLAUDE.md, « Pages HTML ».
 -->
