@@ -113,7 +113,7 @@ Le coffre est `content/` : Obsidian ouvre ce dossier, pas la racine du dépôt. 
 - `{{title}}` reprend le nom du fichier (minuscules, tirets) : remplacer le `title` par un vrai titre après l'insertion du modèle ;
 - `content/.obsidian/` est exclu de git (`.gitignore`) et du site (`ignorePatterns`).
 - configuration constatée dans `content/.obsidian/` (synchronisée par Dropbox) : `templates.json` → `folder: templates` ; `app.json` → `newFileLocation: folder`, `newFileFolderPath: private`. Le format de lien suit les valeurs par défaut d'Obsidian ;
-- **attention aux plugins qui ont leur propre dossier**, comme *Daily notes* (activé par défaut) : ils ne suivent pas « Default location for new notes ». Leurs fichiers créés hors de `private/` seraient publiés. Avant un `npx quartz sync`, `git status` montre ce qui va partir.
+- **attention aux plugins qui ont leur propre dossier** : ils ne suivent pas « Default location for new notes ». Leurs fichiers créés hors de `private/` seraient publiés. *Daily notes* a été désactivé pour cette raison (2026-11-26). Avant un `npx quartz sync`, `git status` montre ce qui va partir.
 
 ## Pages HTML
 
@@ -145,7 +145,7 @@ Ces points viennent de la documentation v4 ou de connaissances non retestées en
 
 ## Prochaines étapes
 
-Les 6 étapes de mise en place sont faites (voir « État actuel du dépôt »). Prochaine piste, optionnelle : des fiches générées par script (squelette `generateur_fiches` disponible à part).
+Les 6 étapes de mise en place sont faites (voir « État actuel du dépôt »). Les fiches générées par script (squelette `generateur_fiches` disponible à part) sont **reportées à une version ultérieure** (décision du 2026-11-26) : ne pas les proposer sans demande.
 
 ## Règles de travail pour l'assistant
 
