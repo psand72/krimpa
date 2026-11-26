@@ -93,6 +93,17 @@ Ne pas retirer ces deux exclusions. `draft: true` ne suffit pas pour un contenu 
 - **reformuler sans changer le sens** toute phrase contenant un nom qui permet d'identifier une entreprise cliente ou une personne. Par exemple, un responsable nommé est remplacé par son rôle ;
 - en cas de doute sur un nom ou un détail, demander à l'utilisateur plutôt que trancher.
 
+## Apparence du site
+
+Choix validés par l'utilisateur le 2026-11-26, après essai en local :
+- **thème** : plugin `@quartz-themes/core` avec `theme: AnuPpuccin` (palette pastel Catppuccin), dans `quartz.config.yaml`. Il est téléchargé au build et mis en cache dans `.quartz-cache/`. Avec ce plugin actif, `theme.colors` n'a presque aucun effet (`docs/configuration.md`) ;
+- **largeurs**, dans `quartz/styles/custom.scss`. Ce fichier n'est pas dans une cascade layer, donc il l'emporte sur les styles de Quartz et du thème :
+  - colonnes latérales à 300 px au lieu de 320 px, sur ordinateur et tablette seulement ;
+  - page à 1 900 px au plus, au lieu de 1 500 px (`base.scss`) ;
+  - texte de la fiche en pleine largeur. AnuPpuccin le limitait à 700 px (`.markdown-preview-view { max-width: var(--file-line-width) }`) ;
+- `custom.scss` fait partie de l'arborescence de Quartz. Un `npx quartz upgrade` pourrait y provoquer un conflit git, facile à résoudre ;
+- pour tester un réglage d'apparence : `npx quartz build --serve --port 8090 --wsPort 3091`. Le port 8080 par défaut est occupé sur cette machine par un autre programme.
+
 ## Obsidian
 
 Le coffre est `content/` : Obsidian ouvre ce dossier, pas la racine du dépôt. Les noms de réglages ci-dessous viennent de l'aide officielle (obsidian.md/help, pages *Templates*, *Manage vaults*, *Settings*), lue le 2026-11-26 :

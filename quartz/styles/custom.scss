@@ -1,3 +1,30 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// Colonnes latérales plus étroites (320px par défaut, $sidePanelWidth dans variables.scss)
+// pour élargir la colonne centrale. Les media queries évitent de toucher la disposition mobile :
+// custom.scss n'est pas dans une cascade layer, il l'emporte donc sur toutes les règles de Quartz.
+$krimpaSidePanelWidth: 300px;
+
+// Largeur maximale de la page : 1900px au lieu de 1500px (1200px + 300px dans base.scss).
+// Sans effet sur les écrans plus étroits que 1900px, où la page prend déjà toute la largeur.
+.page {
+  max-width: 1900px;
+}
+
+// Le thème AnuPpuccin reprend la « longueur de ligne lisible » d'Obsidian :
+// .markdown-preview-view { max-width: var(--file-line-width) } avec --file-line-width: 700px.
+// On lève la limite pour que le texte occupe toute la colonne centrale.
+.page .markdown-preview-view {
+  max-width: 100%;
+}
+
+.page > #quartz-body {
+  @media all and ($desktop) {
+    grid-template-columns: $krimpaSidePanelWidth minmax(0, 1fr) $krimpaSidePanelWidth;
+  }
+  @media all and ($tablet) {
+    grid-template-columns: $krimpaSidePanelWidth minmax(0, 1fr);
+  }
+}
