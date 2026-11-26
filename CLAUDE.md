@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## État actuel du dépôt (à mettre à jour)
 
-Au 2026-11-26, la mise en place est terminée (étapes 1 à 6). L'affichage mobile a été vérifié. Il reste à confirmer le lien « plein écran » dans un navigateur :
+Au 2026-11-26, la mise en place est terminée (étapes 1 à 6). L'affichage mobile et le lien « plein écran » (`data-router-ignore`) ont été vérifiés par l'utilisateur :
 - premières fiches publiées : `s4-fonctionnel/modele-donnees-ecc-s4hana`, `s4-fonctionnel/versions-commandes-achat-s4hana-2023`, `datasphere/power-bi-datasphere-bdc`, plus la page `html/annotations-cds.htm` et sa fiche `cds/annotations-cds`. Les brouillons d'origine restent dans `content/private/` ;
 - arborescence de `content/` créée. Chaque dossier de domaine contient un `.gitkeep` pour que git le conserve. Quartz ignore les fichiers commençant par un point (`globby` sans l'option `dot`, vérifié au build), donc un domaine n'apparaît sur le site qu'à sa première fiche. Le `.gitkeep` peut être supprimé dès que le dossier contient une fiche ;
 - déploiement : `.github/workflows/deploy.yml` est copié **à l'identique** de `docs/hosting.md`, section GitHub Pages (la même doc que quartz.jzhao.xyz/hosting). Il se déclenche sur un push vers `v5`. Pages est activé avec la source GitHub Actions. Site : https://psand72.github.io/krimpa/ ;
