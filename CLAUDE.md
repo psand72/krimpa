@@ -104,6 +104,25 @@ Choix validés par l'utilisateur le 2026-11-26, après essai en local :
 - `custom.scss` fait partie de l'arborescence de Quartz. Un `npx quartz upgrade` pourrait y provoquer un conflit git, facile à résoudre ;
 - pour tester un réglage d'apparence : `npx quartz build --serve --port 8090 --wsPort 3091`. Le port 8080 par défaut est occupé sur cette machine par un autre programme.
 
+## Taille des fichiers et limites GitHub
+
+Limites officielles (docs.github.com, pages *GitHub Pages limits* et *About large files on GitHub*, lues le 2026-11-26) :
+- site publié : **1 Go** maximum ;
+- dépôt : 1 Go recommandé ;
+- bande passante : 100 Go par mois (limite souple) ;
+- déploiement : 10 minutes maximum ;
+- fichier : avertissement au-delà de 50 Mio, **push refusé au-delà de 100 Mio**.
+
+Au 2026-11-26, le site fait 3,8 Mo et le dépôt 41 Mo, surtout l'historique de Quartz. Le risque vient des fichiers binaires (images, PDF, vidéos, pages HTML lourdes) : avec `publishAssets: "all"`, ils sont publiés et restent dans l'historique git, même après suppression.
+
+**Règle (décidée le 2026-11-26)** : avant tout `npx quartz sync`, l'assistant cherche les fichiers de plus de **5 Mo** qui vont partir et les signale à l'utilisateur avant d'envoyer quoi que ce soit :
+
+```bash
+find content \( -path content/private -o -path content/.obsidian \) -prune -o -type f -size +5M -print
+```
+
+Si un fichier apparaît, proposer de le compresser (JPEG ou WebP pour une image) ou de le retirer. Ne pas l'envoyer sans l'accord de l'utilisateur.
+
 ## Obsidian
 
 Le coffre est `content/` : Obsidian ouvre ce dossier, pas la racine du dépôt. Les noms de réglages ci-dessous viennent de l'aide officielle (obsidian.md/help, pages *Templates*, *Manage vaults*, *Settings*), lue le 2026-11-26 :
