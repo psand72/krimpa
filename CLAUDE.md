@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## État actuel du dépôt (à mettre à jour)
 
-Au 2026-11-26, les étapes 1 à 6 sont faites. Il reste à vérifier l'affichage sur mobile (point 7) et le lien « plein écran » :
+Au 2026-11-26, la mise en place est terminée (étapes 1 à 6). L'affichage mobile a été vérifié. Il reste à confirmer le lien « plein écran » dans un navigateur :
 - premières fiches publiées : `s4-fonctionnel/modele-donnees-ecc-s4hana`, `s4-fonctionnel/versions-commandes-achat-s4hana-2023`, `datasphere/power-bi-datasphere-bdc`, plus la page `html/annotations-cds.htm` et sa fiche `cds/annotations-cds`. Les brouillons d'origine restent dans `content/private/` ;
 - arborescence de `content/` créée. Chaque dossier de domaine contient un `.gitkeep` pour que git le conserve. Quartz ignore les fichiers commençant par un point (`globby` sans l'option `dot`, vérifié au build), donc un domaine n'apparaît sur le site qu'à sa première fiche. Le `.gitkeep` peut être supprimé dès que le dossier contient une fiche ;
 - déploiement : `.github/workflows/deploy.yml` est copié **à l'identique** de `docs/hosting.md`, section GitHub Pages (la même doc que quartz.jzhao.xyz/hosting). Il se déclenche sur un push vers `v5`. Pages est activé avec la source GitHub Actions. Site : https://psand72.github.io/krimpa/ ;
@@ -129,17 +129,12 @@ Ces points viennent de la documentation v4 ou de connaissances non retestées en
 4. ~~Le wikilink échappé `[[fiche\|alias]]` dans un tableau s'affiche-t-il correctement ?~~ **Vérifié au build** : oui, le lien est correct et l'alias s'affiche.
 5. ~~Une balise `<iframe>` écrite dans une fiche Markdown est-elle conservée ?~~ **Vérifié au build** : oui. Son `src` est réécrit comme un lien interne (voir « Pages HTML »).
 6. ~~Chemin de la page HTML~~ **Vérifié sur le site publié** : `/html/<nom>.htm` devient `../html/<nom>.htm`. La page répond en 200 avec le type `text/html` à `https://psand72.github.io/krimpa/html/annotations-cds.htm`.
-7. L'affichage de l'iframe sur mobile (hauteur, défilement).
+7. ~~L'affichage de l'iframe sur mobile~~ **Vérifié par l'utilisateur le 2026-11-26** : l'iframe (`height:80vh`) s'affiche bien sur mobile.
 8. ~~Le build génère un fichier `public/CNAME`.~~ **Réglé** : ce fichier vient du plugin `@quartz-community/cname`, qui est désactivé. Il n'est donc plus généré.
 
 ## Prochaines étapes
 
-1. Créer le dépôt à partir du dépôt officiel Quartz, installer les dépendances.
-2. Configurer le site : titre, langue `fr-FR`, `baseUrl` = `<utilisateur>.github.io/<dépôt>`.
-3. Ajouter le workflow GitHub Actions de déploiement et activer Pages (source : GitHub Actions).
-4. Créer l'arborescence `content/` ci-dessus et les modèles `fiche.md` et `fiche-html.md`.
-5. Rédiger `index.md` et 3 à 5 premières fiches, puis vérifier en local (`npx quartz build --serve`), sur le site publié et sur mobile.
-6. Déclarer `content/` comme coffre Obsidian et `content/templates/` comme dossier de modèles.
+Les 6 étapes de mise en place sont faites (voir « État actuel du dépôt »). Prochaine piste, optionnelle : des fiches générées par script (squelette `generateur_fiches` disponible à part).
 
 ## Règles de travail pour l'assistant
 
