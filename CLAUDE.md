@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## État actuel du dépôt (à mettre à jour)
 
-Au 2026-11-26, les étapes 1 à 5 sont faites. Il reste à vérifier l'affichage sur mobile (point 7), puis l'étape 6 (Obsidian) :
+Au 2026-11-26, les étapes 1 à 6 sont faites. Il reste à vérifier l'affichage sur mobile (point 7) et le lien « plein écran » :
 - premières fiches publiées : `s4-fonctionnel/modele-donnees-ecc-s4hana`, `s4-fonctionnel/versions-commandes-achat-s4hana-2023`, `datasphere/power-bi-datasphere-bdc`, plus la page `html/annotations-cds.htm` et sa fiche `cds/annotations-cds`. Les brouillons d'origine restent dans `content/private/` ;
 - arborescence de `content/` créée. Chaque dossier de domaine contient un `.gitkeep` pour que git le conserve. Quartz ignore les fichiers commençant par un point (`globby` sans l'option `dot`, vérifié au build), donc un domaine n'apparaît sur le site qu'à sa première fiche. Le `.gitkeep` peut être supprimé dès que le dossier contient une fiche ;
 - déploiement : `.github/workflows/deploy.yml` est copié **à l'identique** de `docs/hosting.md`, section GitHub Pages (la même doc que quartz.jzhao.xyz/hosting). Il se déclenche sur un push vers `v5`. Pages est activé avec la source GitHub Actions. Site : https://psand72.github.io/krimpa/ ;
@@ -92,6 +92,17 @@ Ne pas retirer ces deux exclusions. `draft: true` ne suffit pas pour un contenu 
 - **conserver tels quels** les termes génériques (« projet », « client », « besoin », « métier », « cadrage », « POC »…) et les noms d'éditeurs, de solutions ou de logiciels (SAP, BO, Fivetran, Snowflake, Microsoft…) ;
 - **reformuler sans changer le sens** toute phrase contenant un nom qui permet d'identifier une entreprise cliente ou une personne. Par exemple, un responsable nommé est remplacé par son rôle ;
 - en cas de doute sur un nom ou un détail, demander à l'utilisateur plutôt que trancher.
+
+## Obsidian
+
+Le coffre est `content/` : Obsidian ouvre ce dossier, pas la racine du dépôt. Les noms de réglages ci-dessous viennent de l'aide officielle (obsidian.md/help, pages *Templates*, *Manage vaults*, *Settings*), lue le 2026-11-26 :
+- **Core plugins → Templates** activé, **Template folder location** = `templates`. Les modèles utilisent `{{title}}` (nom du fichier) et `{{date:YYYY-MM-DD}}` (format personnalisé supporté). Insertion : commande **Templates: Insert template** ;
+- **Files and links → Default location for new notes** = **In the folder specified below** → `private`. Toute nouvelle note naît donc en brouillon, ni publiée ni commitée. Une fois prête, on la déplace dans son domaine ;
+- **Files and links → New link format** = **Shortest path when possible**, ce qui correspond à `markdownLinkResolution: shortest` dans Quartz. **Use Wikilinks** reste activé ;
+- `{{title}}` reprend le nom du fichier (minuscules, tirets) : remplacer le `title` par un vrai titre après l'insertion du modèle ;
+- `content/.obsidian/` est exclu de git (`.gitignore`) et du site (`ignorePatterns`).
+- configuration constatée dans `content/.obsidian/` (synchronisée par Dropbox) : `templates.json` → `folder: templates` ; `app.json` → `newFileLocation: folder`, `newFileFolderPath: private`. Le format de lien suit les valeurs par défaut d'Obsidian ;
+- **attention aux plugins qui ont leur propre dossier**, comme *Daily notes* (activé par défaut) : ils ne suivent pas « Default location for new notes ». Leurs fichiers créés hors de `private/` seraient publiés. Avant un `npx quartz sync`, `git status` montre ce qui va partir.
 
 ## Pages HTML
 
