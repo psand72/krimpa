@@ -6,7 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## État actuel du dépôt (à mettre à jour)
 
-Au 2026-11-26, les étapes 1 à 4 sont faites :
+Au 2026-11-26, les étapes 1 à 5 sont faites. Il reste à vérifier l'affichage sur mobile (point 7), puis l'étape 6 (Obsidian) :
+- premières fiches publiées : `s4-fonctionnel/modele-donnees-ecc-s4hana`, `s4-fonctionnel/versions-commandes-achat-s4hana-2023`, `datasphere/power-bi-datasphere-bdc`, plus la page `html/annotations-cds.htm` et sa fiche `cds/annotations-cds`. Les brouillons d'origine restent dans `content/private/` ;
 - arborescence de `content/` créée. Chaque dossier de domaine contient un `.gitkeep` pour que git le conserve. Quartz ignore les fichiers commençant par un point (`globby` sans l'option `dot`, vérifié au build), donc un domaine n'apparaît sur le site qu'à sa première fiche. Le `.gitkeep` peut être supprimé dès que le dossier contient une fiche ;
 - déploiement : `.github/workflows/deploy.yml` est copié **à l'identique** de `docs/hosting.md`, section GitHub Pages (la même doc que quartz.jzhao.xyz/hosting). Il se déclenche sur un push vers `v5`. Pages est activé avec la source GitHub Actions. Site : https://psand72.github.io/krimpa/ ;
 - plugin `@quartz-community/cname` désactivé dans `quartz.config.yaml`. Selon son README, il sert aux domaines personnalisés, et nous n'en avons pas ;
@@ -116,7 +117,7 @@ Ces points viennent de la documentation v4 ou de connaissances non retestées en
 3. ~~Le workflow de déploiement GitHub Pages recommandé par la documentation officielle.~~ **Fait** : repris tel quel depuis `docs/hosting.md`.
 4. ~~Le wikilink échappé `[[fiche\|alias]]` dans un tableau s'affiche-t-il correctement ?~~ **Vérifié au build** : oui, le lien est correct et l'alias s'affiche.
 5. ~~Une balise `<iframe>` écrite dans une fiche Markdown est-elle conservée ?~~ **Vérifié au build** : oui. Son `src` est réécrit comme un lien interne (voir « Pages HTML »).
-6. Chemin de la page HTML : **réglé au build**, avec `/html/<nom>.htm` et l'extension `.htm` (voir « Pages HTML »). Reste à confirmer **sur le site publié** que la page s'ouvre en plein écran et dans l'iframe.
+6. ~~Chemin de la page HTML~~ **Vérifié sur le site publié** : `/html/<nom>.htm` devient `../html/<nom>.htm`. La page répond en 200 avec le type `text/html` à `https://psand72.github.io/krimpa/html/annotations-cds.htm`.
 7. L'affichage de l'iframe sur mobile (hauteur, défilement).
 8. ~~Le build génère un fichier `public/CNAME`.~~ **Réglé** : ce fichier vient du plugin `@quartz-community/cname`, qui est désactivé. Il n'est donc plus généré.
 
